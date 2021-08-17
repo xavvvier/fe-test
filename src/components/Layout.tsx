@@ -103,7 +103,7 @@ export const SearchInput = styled.input`
   }
 `;
 
-const IconButton = styled.button`
+export const IconButton = styled.button`
   background-color: transparent;
   border: 2px solid white;
   width: 28px;
@@ -116,15 +116,6 @@ const IconButton = styled.button`
     stroke-width: 16;
   }
 `;
-export function DeleteButton() {
-  return (
-    <IconButton>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14">
-        <path d="M10,10L90,90M90,10L10,90" />
-      </svg>
-    </IconButton>
-  );
-}
 export const Hero = styled.section`
   & h1 {
     font-family: 'Merriweather', serif;
@@ -139,41 +130,5 @@ export const Hero = styled.section`
     margin-top: 10px;
     letter-spacing: 1px;
     line-height: 15px;
-  }
-`;
-
-export const ColumnHeader = styled.div`
-  background: linear-gradient(#b8c7da, rgb(74, 85, 105, 0.85) 75%, #4a5569);
-  color: white;
-  padding: 10px;
-`;
-
-export const ColumnSet = styled(Flex)`
-  padding: 2px;
-  background-color: white;
-  flex: 1;
-  & div {
-    flex: 1;
-    margin: 2px;
-  }
-`;
-export const Column = styled.div``;
-export const Item = styled.div`
-  min-height: 40px;
-  display: flex;
-  justify-content: space-between;
-  background-color: #bcc0c7;
-  color: white;
-  align-items: center;
-  padding: 4px;
-  &:nth-of-type(even) {
-    background-color: #f2f3f4;
-    color: #858c98;
-    & button {
-      border-color: #7c8390;
-    }
-    & svg {
-      stroke: #7c8390;
-    }
   }
 `;

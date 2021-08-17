@@ -1,17 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import {
-  Header,
-  Flex,
-  Hero,
-  ColumnSet,
-  Column,
-  ColumnHeader,
-  Item,
-  FlexForm,
-  SearchInput,
-  DeleteButton,
-} from './Layout';
+import { v4 as uuid4 } from 'uuid';
+import { Header, Flex, Hero, FlexForm, SearchInput } from './Layout';
+import ColumnItem from '../ColumnItem';
+import { ColumnSet, ColumnID } from './ColumnSet';
 
 const Main = styled.main`
   font-family: HelveticaNeue, Helvetica, sans-serif;
@@ -21,37 +13,46 @@ const Main = styled.main`
 `;
 
 export default function App() {
-  const columns = [
-    { id: 0, name: 'CHOOSE COLUMN' },
-    { id: 1, name: 'Column 1' },
-    { id: 2, name: 'Column 2' },
-  ];
-  const column1 = [
-    {
-      id: 1,
-      name: 'Item',
-    },
-    {
-      id: 2,
-      name: 'Item long deescription with too much text',
-    },
-    {
-      id: 3,
-      name: 'Item',
-    },
-    {
-      id: 4,
-      name: 'Item',
-    },
-    {
-      id: 5,
-      name: 'Item',
-    },
-    {
-      id: 6,
-      name: 'Item',
-    },
-  ];
+  const [selectedColumn, setSelectedColumn] = useState('');
+  const [itemName, setItemName] = useState('');
+  const [filter, setFilter] = useState('');
+  const [column1Items, setColumn1Items] = useColumnItemsWithStorage(ColumnID.column1);
+  const [column2Items, setColumn2Items] = useColumnItemsWithStorage(ColumnID.column2);
+  const filteredColumn1 = useColumnItemFilter(filter, column1Items);
+  const filteredColumn2 = useColumnItemFilter(filter, column2Items);
+
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value);
+  };
+  const handleColumnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedColumn(e.target.value);
+  };
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setItemName(e.target.value);
+  };
+  const handleItemDelete = (column: string, item: ColumnItem) => {
+    if (column === ColumnID.column1) {
+      setColumn1Items((previous) => previous.filter((current) => current.id !== item.id));
+    }
+    if (column === ColumnID.column2) {
+      setColumn2Items((previous) => previous.filter((current) => current.id !== item.id));
+    }
+  };
+  const handleAddItem = () => {
+    let newColumnItem = {
+      id: uuid4(),
+      name: itemName,
+    };
+    if (selectedColumn === ColumnID.column1) {
+      setColumn1Items((previous) => previous.concat(newColumnItem));
+      setItemName('');
+    }
+    if (selectedColumn === ColumnID.column2) {
+      setColumn2Items((previous) => previous.concat(newColumnItem));
+      setItemName('');
+    }
+  };
+
   return (
     <Main>
       <Flex>
@@ -66,41 +67,79 @@ export default function App() {
         <Flex>
           <Flex direction="row">
             <FlexForm>
-              <input type="text" placeholder="ENTER ITEM" />
-              <select defaultValue="">
-                {columns.map(({ id, name }) => (
-                  <option key={id} value={id} disabled={id === 0}>
-                    {name}
-                  </option>
-                ))}
+              <input
+                type="text"
+                value={itemName}
+                onChange={handleNameChange}
+                placeholder="ENTER ITEM"
+              />
+              <select defaultValue={selectedColumn} onChange={handleColumnChange}>
+                <option value="" disabled hidden>
+                  CHOOSE COLUMN
+                </option>
+                <option value={ColumnID.column1}>COLUMN 1</option>
+                <option value={ColumnID.column2}>COLUMN 2</option>
               </select>
-              <button>ADD ITEM</button>
+              <button onClick={handleAddItem}>ADD ITEM</button>
               <label htmlFor="search"> SEARCH AN ITEM </label>
-              <SearchInput placeholder="SEARCH" id="search" type="text" />
+              <SearchInput
+                placeholder="SEARCH"
+                id="search"
+                value={filter}
+                onChange={handleFilterChange}
+                type="text"
+              />
             </FlexForm>
-            <ColumnSet direction="row">
-              <Column>
-                <ColumnHeader>COLUMN 1</ColumnHeader>
-                {column1.map((item) => (
-                  <Item key={item.id}>
-                    {item.name}
-                    <DeleteButton />
-                  </Item>
-                ))}
-              </Column>
-              <Column>
-                <ColumnHeader>COLUMN 2</ColumnHeader>
-                {column1.map((item) => (
-                  <Item key={item.id}>
-                    {item.name}
-                    <DeleteButton />
-                  </Item>
-                ))}
-              </Column>
-            </ColumnSet>
+            <ColumnSet
+              column1={filteredColumn1}
+              column2={filteredColumn2}
+              onItemDelete={handleItemDelete}
+            />
           </Flex>
         </Flex>
       </Flex>
     </Main>
   );
+}
+
+function useColumnItemFilter(filter: string, items: ColumnItem[]) {
+  const [filtered, setFiltered] = useState(items);
+  useEffect(() => {
+    if (filter) {
+      setFiltered(items.filter((item) => item.name.toLowerCase().includes(filter.toLowerCase())));
+    } else {
+      setFiltered(items);
+    }
+  }, [filter, items]);
+  return filtered;
+}
+
+function useColumnItemsWithStorage(
+  key: string
+): [ColumnItem[], React.Dispatch<React.SetStateAction<ColumnItem[]>>] {
+  const [columnItems, setColumnItems] = useState<ColumnItem[]>([]);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(key);
+    if (stored) {
+      const items = JSON.parse(stored);
+      setColumnItems(items);
+    }
+    setIsInitialLoad(false);
+  }, []);
+
+  useEffect(() => {
+    // Avoid re-write the items on storage if we have just read them
+    if (isInitialLoad) {
+      return;
+    }
+    if (columnItems && columnItems.length) {
+      localStorage.setItem(key, JSON.stringify(columnItems));
+    } else {
+      localStorage.removeItem(key);
+    }
+  }, [columnItems]);
+
+  return [columnItems, setColumnItems];
 }
