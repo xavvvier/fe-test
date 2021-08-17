@@ -9,7 +9,7 @@ const Main = styled.main`
   font-family: HelveticaNeue, Helvetica, sans-serif;
   color: white;
   max-width: 500px;
-  margin: 0 auto;
+  margin: 24px auto;
 `;
 
 export default function App() {
