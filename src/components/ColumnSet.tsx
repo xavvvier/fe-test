@@ -25,7 +25,9 @@ export function ColumnSet(props: ColumnSetProps) {
         <ColumnHeader>COLUMN 1</ColumnHeader>
         {column1.map((item) => (
           <Item key={item.id}>
-            {item.name}
+            <span>
+              {item.name}
+              </span>
             <DeleteButton onClick={(e) => handleClick('column1', item)} />
           </Item>
         ))}
@@ -34,7 +36,9 @@ export function ColumnSet(props: ColumnSetProps) {
         <ColumnHeader>COLUMN 2</ColumnHeader>
         {column2.map((item) => (
           <Item key={item.id}>
-            {item.name}
+            <span>
+              {item.name}
+              </span>
             <DeleteButton onClick={(e) => handleClick('column2', item)} />
           </Item>
         ))}
@@ -47,20 +51,22 @@ const ColumnWrapper = styled(Flex)`
   padding: 2px;
   background-color: white;
   flex: 1;
-  & div {
+  & > div {
     flex: 1;
     margin: 2px;
+    background: #79818f;
   }
 `;
 export const Column = styled.div``;
 export const Item = styled.div`
-  min-height: 40px;
   display: flex;
   justify-content: space-between;
   background-color: #bcc0c7;
   color: white;
   align-items: center;
   padding: 4px;
+  padding-left: 10px;
+  font-size: 12px;
   &:nth-of-type(even) {
     background-color: #f2f3f4;
     color: #858c98;
@@ -71,10 +77,15 @@ export const Item = styled.div`
       stroke: #7c8390;
     }
   }
+  & span {
+    flex: 1;
+  }
 `;
 
 export const ColumnHeader = styled.div`
   background: linear-gradient(#b8c7da, rgb(74, 85, 105, 0.85) 75%, #4a5569);
   color: white;
   padding: 10px;
+  text-align: center;
+  font-size: 11px;
 `;

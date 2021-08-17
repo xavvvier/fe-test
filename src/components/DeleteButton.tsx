@@ -7,7 +7,7 @@ interface DeleteButtonProps {
 export default function DeleteButton({ onClick }: DeleteButtonProps) {
   return (
     <IconButton onClick={onClick}>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="8" height="8">
         <path d="M10,10L90,90M90,10L10,90" />
       </svg>
     </IconButton>

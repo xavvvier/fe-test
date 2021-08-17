@@ -1,8 +1,16 @@
 import styled from '@emotion/styled';
 
+export const colors = {
+  border: 'white',
+  borderHightlight: '#4a5569;',
+  fontPrimary: 'white',
+  fontSecondary: '#d5d7db',
+  backgroundSecondary: '#9ca1ab',
+};
+
 export const Header = styled.h4`
   background: linear-gradient(#c2cad6, rgba(153, 167, 185, 0.6) 75%, #818fa1);
-  color: white;
+  color: ${colors.border};
   padding: 6px;
   text-align: center;
   margin: 11px 0;
@@ -25,18 +33,18 @@ export const Flex = styled.div<FlexProps>`
 export const FlexForm = styled(Flex)`
   & input {
     height: 30px;
-    border: 2px solid white;
-    background-color: #9ca1ab;
-    color: white;
+    border: 2px solid ${colors.border};
+    background-color: ${colors.backgroundSecondary};
+    color: ${colors.fontPrimary};
     outline: 0;
     padding: 1px 10px;
     font-size: 9px;
     margin-bottom: 10px;
     &:focus {
-      border-color: #4a5569;
+      border-color: ${colors.borderHightlight};
     }
-    &::-webkit-input-placeholder {
-      color: #d5d7db;
+    &::placeholder {
+      color: ${colors.fontSecondary};
     }
   }
   & select {
@@ -46,39 +54,39 @@ export const FlexForm = styled(Flex)`
     background-size: 12px;
     background-position: calc(100% - 8px) 12px;
     background-repeat: no-repeat;
-    background-color: #9ca1ab;
+    background-color: ${colors.backgroundSecondary};
     height: 36px;
-    border: 2px solid white;
-    color: #d5d7db;
+    border: 2px solid ${colors.border};
+    color: ${colors.fontSecondary};
     outline: 0;
     padding: 0 22px 0 10px;
     font-size: 9px;
     &:focus {
-      border-color: #4a5569;
+      border-color: ${colors.borderHightlight};
       background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%234a5569'><polygon points='0,0 100,0 50,50'/></svg>")
         no-repeat;
       background-size: 12px;
       background-position: calc(100% - 8px) 12px;
       background-repeat: no-repeat;
-      background-color: #9ca1ab;
+      background-color: ${colors.backgroundSecondary};
     }
   }
   label {
-    color: white;
+    color: ${colors.fontPrimary};
     margin-top: 28px;
     font-weight: bold;
     font-size: 8px;
   }
   button {
-    border: 2px solid white;
+    border: 2px solid ${colors.border};
     background-color: transparent;
-    color: white;
+    color: ${colors.fontPrimary};
     margin-top: 10px;
     padding: 10px;
     outline: 0;
     font-size: 10px;
     &:focus {
-      border-color: #4a5569;
+      border-color: ${colors.borderHightlight};
     }
   }
   @media only screen and (min-width: 768px) {
@@ -90,8 +98,8 @@ export const FlexForm = styled(Flex)`
 `;
 
 export const SearchInput = styled.input`
-  border: 2px solid white;
-  color: white;
+  border: 2px solid ${colors.border};
+  color: ${colors.fontPrimary};
   outline: 0;
   margin-top: 5px;
   background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='164' height='163'><path fill='white' d='M120.97 114.34L115.31 120C113.81 121.5 111.78 122.34 109.66 122.34C107.54 122.34 105.5 121.5 104 120L72.38 89.35C65.23 93.57 56.9 96 48 96C21.49 96 0 74.51 0 48C0 21.49 21.49 0 48 0C74.51 0 96 21.49 96 48C96 56.9 93.57 65.23 89.35 72.38L120.97 103.03C124.1 106.15 124.1 111.22 120.97 114.34ZM48 80C65.67 80 80 65.67 80 48C80 30.33 65.67 16 48 16C30.33 16 16 30.33 16 48C16 65.67 30.33 80 48 80Z' /></svg>")
@@ -99,8 +107,8 @@ export const SearchInput = styled.input`
   background-size: 16px;
   background-position: calc(100% - 2px) 5px;
   background-repeat: no-repeat;
-  background-color: #9ca1ab;
-  padding: 1px 20px 1px 2px !important;
+  background-color: ${colors.backgroundSecondary};
+  padding: 1px 20px 1px 10px !important;
   height: 20px !important;
   &:focus {
     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='164' height='163'><path fill='%234a5569' d='M120.97 114.34L115.31 120C113.81 121.5 111.78 122.34 109.66 122.34C107.54 122.34 105.5 121.5 104 120L72.38 89.35C65.23 93.57 56.9 96 48 96C21.49 96 0 74.51 0 48C0 21.49 21.49 0 48 0C74.51 0 96 21.49 96 48C96 56.9 93.57 65.23 89.35 72.38L120.97 103.03C124.1 106.15 124.1 111.22 120.97 114.34ZM48 80C65.67 80 80 65.67 80 48C80 30.33 65.67 16 48 16C30.33 16 16 30.33 16 48C16 65.67 30.33 80 48 80Z' /></svg>")
@@ -108,23 +116,27 @@ export const SearchInput = styled.input`
     background-size: 16px;
     background-position: calc(100% - 2px) 5px;
     background-repeat: no-repeat;
-    border-color: #4a5569;
+    border-color: ${colors.borderHightlight};
   }
-  &::-webkit-input-placeholder {
-    color: #d5d7db;
+  &::placeholder {
+    color: ${colors.fontSecondary};
   }
 `;
 
 export const IconButton = styled.button`
   background-color: transparent;
-  border: 2px solid white;
-  width: 28px;
-  height: 28px;
-  border-radius: 9px;
+  border: 1px solid ${colors.border};
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
   float: right;
+  cursor: pointer;
+  margin: 4px;
+  padding: 0;
   & svg {
     position: relative;
-    stroke: white;
+    top: -1px;
+    stroke: ${colors.border};
     stroke-width: 16;
   }
 `;
