@@ -4,6 +4,7 @@ import { v4 as uuid4 } from 'uuid';
 import { Header, Flex, Hero, FlexForm, SearchInput } from './Layout';
 import ColumnItem from '../ColumnItem';
 import { ColumnSet, ColumnID } from './ColumnSet';
+import { DropResult } from 'react-beautiful-dnd';
 
 const Main = styled.main`
   font-family: HelveticaNeue, Helvetica, sans-serif;
@@ -31,26 +32,46 @@ export default function App() {
     setItemName(e.target.value);
   };
   const handleItemDelete = (column: string, item: ColumnItem) => {
-    if (column === ColumnID.column1) {
-      setColumn1Items((previous) => previous.filter((current) => current.id !== item.id));
-    }
-    if (column === ColumnID.column2) {
-      setColumn2Items((previous) => previous.filter((current) => current.id !== item.id));
-    }
+    setForColumn(column)((previous) => previous.filter((current) => current.id !== item.id));
   };
   const handleAddItem = () => {
     let newColumnItem = {
       id: uuid4(),
       name: itemName,
     };
-    if (selectedColumn === ColumnID.column1) {
-      setColumn1Items((previous) => previous.concat(newColumnItem));
+    if (selectedColumn) {
+      setForColumn(selectedColumn)((previous) => previous.concat(newColumnItem));
       setItemName('');
     }
-    if (selectedColumn === ColumnID.column2) {
-      setColumn2Items((previous) => previous.concat(newColumnItem));
-      setItemName('');
+  };
+  const handleDragEnd = (result: DropResult) => {
+    const { destination, source, draggableId } = result;
+    if (!destination) {
+      return;
     }
+    // Element dropped at the same location where it started
+    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+      return;
+    }
+    // Remove item from source column
+    setForColumn(source.droppableId)((items) =>
+      items.filter((item, index) => index !== source.index)
+    );
+    // Add item to destination column
+    setForColumn(destination.droppableId)((items) => {
+      const item = getItemInColumn(source.droppableId, draggableId);
+      const leftHand = items.slice(0, destination.index);
+      const rightHand = items.slice(destination.index);
+      return [...leftHand, item, ...rightHand];
+    });
+  };
+
+  const getItemInColumn = (columnId: string, itemId: string): ColumnItem | undefined => {
+    const items = columnId === ColumnID.column1 ? column1Items : column2Items;
+    return items.find((item) => item.id === itemId);
+  };
+  const setForColumn = (columnId: string): React.Dispatch<React.SetStateAction<ColumnItem[]>> => {
+    return columnId === ColumnID.column1 ? setColumn1Items : setColumn2Items;
   };
 
   return (
@@ -94,6 +115,7 @@ export default function App() {
               column1={filteredColumn1}
               column2={filteredColumn2}
               onItemDelete={handleItemDelete}
+              onItemDragEnd={handleDragEnd}
             />
           </Flex>
         </Flex>
