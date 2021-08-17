@@ -1,9 +1,11 @@
 # fe-test
 
 ### TODO
+- [x] Add drag and drop functionality
+- [ ] Use redux for state management
 - [ ] Sort items by column
-- [ ] Add drag and drop functionality
-- [ ] Add form validation
+- [ ] Add form validation feedback
+- [ ] Include unit tests
 
 ### Deployment
 
