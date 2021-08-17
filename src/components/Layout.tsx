@@ -46,6 +46,9 @@ export const FlexForm = styled(Flex)`
     &::placeholder {
       color: ${colors.fontSecondary};
     }
+    &:last-of-type {
+      margin-bottom: 0px;
+    }
   }
   & select {
     appearance: none;
